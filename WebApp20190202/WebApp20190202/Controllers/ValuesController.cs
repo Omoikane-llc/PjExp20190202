@@ -28,15 +28,19 @@ namespace WebApp20190202.Controllers {
             var act = data.ActionType;
             JsonCarrier res = null;
 
-            switch (act) {
-                case "login_check":
-                    var loginCheck = new BlobAccessGroupInfo();
-                    res = loginCheck.CheckLogin(data);
-                    break;
-                default:
-                    data.ErrorMessage = "invalid actionType " + act;
-                    res = data;
-                    break;
+            try {
+                switch (act) {
+                    case "login_check":
+                        var loginCheck = new BlobAccessGroupInfo();
+                        res = loginCheck.CheckLogin(data);
+                        break;
+                    default:
+                        data.ErrorMessage = "invalid actionType " + act;
+                        res = data;
+                        break;
+                }
+            } catch (Exception ex) {
+                data.ErrorMessage = ex.StackTrace.ToString();
             }
 
             logger.Info("End Post");

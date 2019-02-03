@@ -1,4 +1,5 @@
 ﻿using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -14,6 +15,15 @@ namespace WebApp20190202.Models {
         public JsonCarrier CheckLogin(JsonCarrier data) {
             logger.Info("Start CheckLogin");
             logger.Debug(ConfigurationManager.AppSettings["StorageConnectionString"].ToString());
+            var containerName = "group-info-blob";
+            var blobName = data.GroupId;
+
+            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+            CloudBlobContainer container = blobClient.GetContainerReference(containerName);
+            CloudBlockBlob blockBlob = container.GetBlockBlobReference(blobName);
+            var content = blockBlob.DownloadText();
+            logger.Debug(content);
+
             logger.Info("End CheckLogin");
             return data;
         }
