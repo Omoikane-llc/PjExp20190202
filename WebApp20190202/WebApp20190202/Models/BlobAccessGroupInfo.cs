@@ -1,5 +1,6 @@
 ﻿using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -23,15 +24,39 @@ namespace WebApp20190202.Models {
             CloudBlockBlob blockBlob = container.GetBlockBlobReference(blobName);
             var content = blockBlob.DownloadText();
             logger.Debug(content);
+            var jsonContent = JsonConvert.DeserializeObject<GroupInfoCarrier>(content);
+
+            if (CheckEmail(data, jsonContent)) {
+                data.ActionResult = "checkOK";
+                data.Uploadfiles = jsonContent.Uploadfiles;
+            }
 
             logger.Info("End CheckLogin");
             return data;
         }
 
-        public List<string> GetMemberList(string groupId) {
-            var result = new List<string>();
+        private bool CheckEmail(JsonCarrier data, GroupInfoCarrier blob) {
+            logger.Debug("Start CheckEmail" + data.EmailAddress);
+            var result = false;
+            var emailList = blob.Emails.Split(new string[] {","}, StringSplitOptions.None);
 
+            foreach(string email in emailList) {
+                logger.Debug(email);
+                if (data.EmailAddress.Equals(email.Trim())) {
+                    result = true;
+                    break;
+                }
+            }
+            logger.Debug("End CheckEmail");
             return result;
         }
+    }
+
+    public class GroupInfoCarrier {
+        [JsonProperty(PropertyName = "uploadfiles")]
+        public string Uploadfiles { get; set; }
+
+        [JsonProperty(PropertyName = "emails")]
+        public string Emails { get; set; }
     }
 }

@@ -15,6 +15,9 @@ namespace WebApp20190202.Models {
         [JsonProperty(PropertyName = "emailAddress")]
         public string EmailAddress { get; set; }
 
+        [JsonProperty(PropertyName = "uploadfiles")]
+        public string Uploadfiles { get; set; }
+
         [JsonProperty(PropertyName = "actionResult")]
         public string ActionResult { get; set; }
         

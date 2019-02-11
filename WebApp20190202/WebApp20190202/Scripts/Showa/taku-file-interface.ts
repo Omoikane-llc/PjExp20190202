@@ -8,6 +8,7 @@
         actionType: string;
         groupId: string;
         emailAddress: string;
+        uploadfiles: string;
         actionResult: string;
         errorMessage: string;
     }

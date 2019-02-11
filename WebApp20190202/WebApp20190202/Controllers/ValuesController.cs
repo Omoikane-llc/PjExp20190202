@@ -41,6 +41,7 @@ namespace WebApp20190202.Controllers {
                 }
             } catch (Exception ex) {
                 data.ErrorMessage = ex.StackTrace.ToString();
+                logger.Warn("error occured post " + ex.StackTrace.ToString());
             }
 
             logger.Info("End Post");
